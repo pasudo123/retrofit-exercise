@@ -1,4 +1,10 @@
 package com.example.retrofitexercise.client.shortnews
 
-class ShortNewsDummyClient : ShortNewsClient{
+import retrofit2.Call
+
+interface ShortNewsDummyClient : ShortNewsClient{
+
+    override fun getNewsByCategory(category: String): Call<String> {
+        TODO("")
+    }
 }

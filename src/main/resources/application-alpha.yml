@@ -8,5 +8,5 @@ server:
 app:
   client:
     short-news:
-      host: https://inshortsapi.vercel.app/news
+      host: https://inshortsapi.vercel.app/news/
       dummy: false

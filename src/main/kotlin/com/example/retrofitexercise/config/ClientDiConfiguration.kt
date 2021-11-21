@@ -16,12 +16,11 @@ import retrofit2.converter.jackson.JacksonConverterFactory
 @Configuration
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "app.client")
-@Validated
 class ClientDiConfiguration(
     private val mapper: ObjectMapper
 ) {
 
-    private val shortNews = ShortNews()
+    val shortNews = ShortNews()
 
     class ShortNews {
         var host: String? = null
@@ -32,10 +31,10 @@ class ClientDiConfiguration(
     fun shortNewsClient(): ShortNewsClient {
         val httpClient = generateHttpClient()
 
-        val shortNewsClient = if(shortNews.dummy!!) {
-            ShortNewsDummyClient()
+        val shortNewsClientClazz = if(shortNews.dummy!!) {
+            ShortNewsDummyClient::class.java
         } else {
-            ShortNewsRealClient()
+            ShortNewsRealClient::class.java
         }
 
         return Retrofit.Builder()
@@ -43,7 +42,7 @@ class ClientDiConfiguration(
             .addConverterFactory(JacksonConverterFactory.create(mapper))
             .callFactory(httpClient)
             .build()
-            .create(shortNewsClient::class.java)
+            .create(shortNewsClientClazz)
     }
 
     companion object {
