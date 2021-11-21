@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    active: default
+
+server:
+  port: 48091
+
+app:
+  client:
+    short-news:
+      host: https://inshortsapi.vercel.app/news
+      dummy: true
