@@ -1,0 +1,1 @@
+GET {{host}}/short-news?category=ALL

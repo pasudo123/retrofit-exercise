@@ -6,15 +6,12 @@ import com.example.retrofitexercise.client.shortnews.ShortNewsRealClient
 import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.OkHttpClient
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.validation.annotation.Validated
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 
 @Configuration
-@EnableConfigurationProperties
 @ConfigurationProperties(prefix = "app.client")
 class ClientDiConfiguration(
     private val mapper: ObjectMapper
