@@ -1,5 +1,6 @@
 package com.example.retrofitexercise.client.shortnews
 
+import com.example.retrofitexercise.shortnews.resources.ShortNewsResources
 import retrofit2.Call
 
 interface ShortNewsClient {
@@ -13,5 +14,5 @@ interface ShortNewsClient {
         SCIENCE("science")
     }
 
-    fun getNewsByCategory(category: String): Call<String>
+    fun getNewsByCategory(category: String): Call<ShortNewsResources.Response>
 }

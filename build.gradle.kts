@@ -29,12 +29,17 @@ dependencies {
     // springboot validation
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
+    // logging
+    implementation("io.github.microutils:kotlin-logging-jvm:2.0.10")
 
     // retrofit2 : for api communicate
     // https://square.github.io/retrofit/
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-jackson:2.9.0")
     implementation("com.squareup.retrofit2:adapter-rxjava2:2.9.0")
+
+    // okhttp3 logging
+    implementation("com.squareup.okhttp3:logging-interceptor")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
