@@ -1,8 +1,5 @@
 package com.example.retrofitexercise.client.shortnews
 
-import com.example.retrofitexercise.shortnews.resources.ShortNewsResources
-import retrofit2.Call
-
 interface ShortNewsClient {
 
     enum class Category(val param: String) {
@@ -14,5 +11,5 @@ interface ShortNewsClient {
         SCIENCE("science")
     }
 
-    fun getNewsByCategory(category: String): Call<ShortNewsResources.Response>
+    fun getNewsByCategory(category: String): Any
 }

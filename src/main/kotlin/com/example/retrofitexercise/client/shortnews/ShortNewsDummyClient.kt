@@ -2,15 +2,12 @@ package com.example.retrofitexercise.client.shortnews
 
 import com.example.retrofitexercise.shortnews.resources.ShortNewsResources
 import com.fasterxml.jackson.databind.ObjectMapper
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class ShortNewsDummyClient(
     private val mapper: ObjectMapper
-): ShortNewsClient{
+): ShortNewsClient {
 
-    override fun getNewsByCategory(category: String): Call<ShortNewsResources.Response> {
+    override fun getNewsByCategory(category: String): ShortNewsResources.Response {
         val responseString = """
         {
             "category": "$category",
@@ -29,18 +26,6 @@ class ShortNewsDummyClient(
         }         
         """.trimIndent()
 
-        val response = mapper.readValue(responseString, ShortNewsResources.Response::class.java)
-
-        return TODO("")
-//        return Callback<ShortNewsResources.Response> {
-//            @Override
-//            fun onResponse(call: Call<ShortNewsResources.Response>, response: Response<ShortNewsResources.Response>) {
-//
-//            }
-//
-//            fun onFailure(call: Call<ShortNewsResources.Response>, t: Throwable) {
-//
-//            }
-//        }
+        return mapper.readValue(responseString, ShortNewsResources.Response::class.java)
     }
 }

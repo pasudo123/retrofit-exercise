@@ -1,6 +1,8 @@
 package com.example.retrofitexercise.config
 
-import com.example.retrofitexercise.client.shortnews.ShortNewsClient
+import com.example.retrofitexercise.client.shortnews.ShortNewsDummyClientService
+import com.example.retrofitexercise.client.shortnews.ShortNewsRealClientService
+import com.example.retrofitexercise.client.shortnews.ShortNewsClientService
 import com.example.retrofitexercise.client.shortnews.ShortNewsDummyClient
 import com.example.retrofitexercise.client.shortnews.ShortNewsRealClient
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -26,19 +28,21 @@ class ClientDiConfiguration(
     }
 
     @Bean
-    fun shortNewsClient(): ShortNewsClient {
+    fun shortNewsClientService(): ShortNewsClientService {
 
         if(shortNews.dummy!!) {
-            return ShortNewsDummyClient(mapper)
+            return ShortNewsDummyClientService(ShortNewsDummyClient(mapper))
         }
 
         val httpClient = generateHttpClient()
-        return Retrofit.Builder()
+        val shortNewsRealClient = Retrofit.Builder()
             .baseUrl(shortNews.host!!)
             .addConverterFactory(JacksonConverterFactory.create(mapper))
             .callFactory(httpClient)
             .build()
             .create(ShortNewsRealClient::class.java)
+
+        return ShortNewsRealClientService(shortNewsRealClient)
     }
 
     companion object {
