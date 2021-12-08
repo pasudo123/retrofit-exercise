@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
+import java.util.concurrent.TimeUnit
 
 @Configuration
 @ConfigurationProperties(prefix = "app.client")
@@ -23,10 +24,15 @@ class ClientDiConfiguration(
 
     val shortNews = ShortNews()
 
-    class ShortNews {
-        var host: String? = null
-        var dummy: Boolean? = null
-    }
+    abstract class Client(
+        var host: String? = null,
+        var dummy: Boolean? = null,
+        var connectionTimeout: Long = 3000,
+        var readTimeout: Long = 3000,
+        var writeTimeout: Long = 3000,
+    )
+
+    class ShortNews : Client()
 
     @Bean
     fun shortNewsClientService(): ShortNewsClientService {
@@ -35,7 +41,7 @@ class ClientDiConfiguration(
             return ShortNewsDummyClientService(ShortNewsDummyClient(mapper))
         }
 
-        val httpClient = generateHttpClient()
+        val httpClient = generateHttpClient(shortNews)
         val shortNewsRealClient = Retrofit.Builder()
             .baseUrl(shortNews.host!!)
             .addConverterFactory(JacksonConverterFactory.create(mapper))
@@ -47,13 +53,16 @@ class ClientDiConfiguration(
     }
 
     companion object {
-        private fun generateHttpClient(): OkHttpClient {
+        private fun generateHttpClient(client: Client): OkHttpClient {
 
             val loggingInterceptor = HttpLoggingInterceptor().apply {
                 this.level = HttpLoggingInterceptor.Level.BODY
             }
 
             return OkHttpClient.Builder()
+                .connectTimeout(client.connectionTimeout, TimeUnit.MILLISECONDS)
+                .readTimeout(client.readTimeout, TimeUnit.MILLISECONDS)
+                .writeTimeout(client.writeTimeout, TimeUnit.MILLISECONDS)
                 .addInterceptor(RetrofitCustomLoggingInterceptor())
                 .addInterceptor { chain ->
                     val builder = chain.request().newBuilder()

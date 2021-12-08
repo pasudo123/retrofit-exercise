@@ -7,3 +7,6 @@ app:
     short-news:
       host: https://inshortsapi.vercel.app/
       dummy: false
+      connection-timeout: 6000
+      read-timeout: 6000
+      write-timeout: 6000
