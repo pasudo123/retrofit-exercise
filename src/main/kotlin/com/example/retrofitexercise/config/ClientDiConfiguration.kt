@@ -1,10 +1,11 @@
 package com.example.retrofitexercise.config
 
-import com.example.retrofitexercise.client.shortnews.ShortNewsDummyClientService
-import com.example.retrofitexercise.client.shortnews.ShortNewsRealClientService
+import com.example.retrofitexercise.client.interceptor.RetrofitCustomLoggingInterceptor
 import com.example.retrofitexercise.client.shortnews.ShortNewsClientService
 import com.example.retrofitexercise.client.shortnews.ShortNewsDummyClient
+import com.example.retrofitexercise.client.shortnews.ShortNewsDummyClientService
 import com.example.retrofitexercise.client.shortnews.ShortNewsRealClient
+import com.example.retrofitexercise.client.shortnews.ShortNewsRealClientService
 import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -49,11 +50,11 @@ class ClientDiConfiguration(
         private fun generateHttpClient(): OkHttpClient {
 
             val loggingInterceptor = HttpLoggingInterceptor().apply {
-                this.level = HttpLoggingInterceptor.Level.BASIC
+                this.level = HttpLoggingInterceptor.Level.BODY
             }
 
             return OkHttpClient.Builder()
-                .addInterceptor(loggingInterceptor)
+                .addInterceptor(RetrofitCustomLoggingInterceptor())
                 .addInterceptor { chain ->
                     val builder = chain.request().newBuilder()
                         .header("Accept", "application/json")
