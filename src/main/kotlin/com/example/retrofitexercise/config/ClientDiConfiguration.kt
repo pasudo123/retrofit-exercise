@@ -1,12 +1,8 @@
 package com.example.retrofitexercise.config
 
-import com.example.retrofitexercise.client.interceptor.RetrofitCustomLoggingInterceptor
-import com.example.retrofitexercise.client.shortnews.ShortNewsClientService
-import com.example.retrofitexercise.client.shortnews.ShortNewsDummyClient
-import com.example.retrofitexercise.client.shortnews.ShortNewsDummyClientService
-import com.example.retrofitexercise.client.shortnews.ShortNewsRealClient
-import com.example.retrofitexercise.client.shortnews.ShortNewsRealClientService
+import com.example.retrofitexercise.client.shortnews.ShortNewsClient
 import com.fasterxml.jackson.databind.ObjectMapper
+import okhttp3.Headers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -22,38 +18,35 @@ class ClientDiConfiguration(
     private val mapper: ObjectMapper,
 ) {
 
-    val shortNews = ShortNews()
-
     abstract class Client(
         var host: String? = null,
-        var dummy: Boolean? = null,
         var connectionTimeout: Long = 3000,
         var readTimeout: Long = 3000,
         var writeTimeout: Long = 3000,
     )
-
     class ShortNews : Client()
+    val shortNews = ShortNews()
 
     @Bean
-    fun shortNewsClientService(): ShortNewsClientService {
+    fun shortNewsClient(): ShortNewsClient {
 
-        if(shortNews.dummy!!) {
-            return ShortNewsDummyClientService(ShortNewsDummyClient(mapper))
-        }
+        val headers = Headers.of(mapOf(
+            "Content-Type" to "application/json",
+            "Accept" to "application/json"
+        ))
 
-        val httpClient = generateHttpClient(shortNews)
-        val shortNewsRealClient = Retrofit.Builder()
+        val httpClient = generateHttpClient(headers, shortNews)
+
+        return Retrofit.Builder()
             .baseUrl(shortNews.host!!)
             .addConverterFactory(JacksonConverterFactory.create(mapper))
             .callFactory(httpClient)
             .build()
-            .create(ShortNewsRealClient::class.java)
-
-        return ShortNewsRealClientService(shortNewsRealClient)
+            .create(ShortNewsClient::class.java)
     }
 
     companion object {
-        private fun generateHttpClient(client: Client): OkHttpClient {
+        private fun generateHttpClient(headers: Headers, client: Client): OkHttpClient {
 
             val loggingInterceptor = HttpLoggingInterceptor().apply {
                 this.level = HttpLoggingInterceptor.Level.BODY
@@ -63,10 +56,10 @@ class ClientDiConfiguration(
                 .connectTimeout(client.connectionTimeout, TimeUnit.MILLISECONDS)
                 .readTimeout(client.readTimeout, TimeUnit.MILLISECONDS)
                 .writeTimeout(client.writeTimeout, TimeUnit.MILLISECONDS)
-                .addInterceptor(RetrofitCustomLoggingInterceptor())
+//                .addInterceptor(RetrofitCustomLoggingInterceptor())
+                .addInterceptor(loggingInterceptor)
                 .addInterceptor { chain ->
-                    val builder = chain.request().newBuilder()
-                        .header("Accept", "application/json")
+                    val builder = chain.request().newBuilder().headers(headers)
                     val request = builder.build()
                     chain.proceed(request)
                 }.build()
