@@ -59,7 +59,7 @@ abstract class MockWebServerSupport {
             .readTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
             .writeTimeout(TIMEOUT, TimeUnit.MILLISECONDS)
             .addInterceptor(HttpLoggingInterceptor().apply {
-                this.level = HttpLoggingInterceptor.Level.BODY
+                this.level = HttpLoggingInterceptor.Level.NONE
             })
             .addInterceptor { chain ->
                 val builder = chain.request().newBuilder().headers(
