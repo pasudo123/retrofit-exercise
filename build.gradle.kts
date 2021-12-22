@@ -41,7 +41,21 @@ dependencies {
     // okhttp3 logging
     implementation("com.squareup.okhttp3:logging-interceptor")
 
+    // test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    // MockWebServer external api test
+    // https://github.com/square/okhttp/blob/master/mockwebserver/README.md
+    // https://mvnrepository.com/artifact/com.squareup.okhttp3/mockwebserver
+    // retrofit2 의 okhttp 버전과 맞춰주어야 한다.
+    testImplementation("com.squareup.okhttp3:mockwebserver:3.14.9") {
+        // junit4 를 제외해주면,  org.junit.rules.ExternalResource 에 대한 의존성이 없어 컴파일 에러가 난다.
+        // this.exclude(group = "junit", module = "junit")
+    }
+
+    // mock & kotest
+    testImplementation("io.mockk:mockk:1.10.6")
+    testImplementation("io.kotest:kotest-assertions-core:4.4.3")
 }
 
 tasks.withType<KotlinCompile> {

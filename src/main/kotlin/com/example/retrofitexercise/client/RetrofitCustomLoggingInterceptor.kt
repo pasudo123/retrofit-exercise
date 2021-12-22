@@ -1,4 +1,4 @@
-package com.example.retrofitexercise.client.interceptor
+package com.example.retrofitexercise.client
 
 import mu.KLoggable
 import okhttp3.Interceptor

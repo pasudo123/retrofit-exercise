@@ -18,4 +18,19 @@ interface ShortNewsClient {
 
     @GET("news")
     fun getNewsByCategory(@Query("category") category: String): Call<ShortNewsResources.Response>
+
+    @GET("result-200")
+    fun result200(): Call<ShortNewsResources.BasicResponse>
+
+    @GET("result-200-body-empty")
+    fun result200BodyEmpty(): Call<ShortNewsResources.BasicResponse>
+
+    @GET("result-204")
+    fun result204(): Call<ShortNewsResources.BasicResponse>
+
+    @GET("result-404")
+    fun result404(): Call<ShortNewsResources.BasicResponse>
+
+    @GET("result-500")
+    fun result500(): Call<ShortNewsResources.BasicResponse>
 }

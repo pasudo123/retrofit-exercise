@@ -8,6 +8,10 @@ class ShortNewsResources {
         val success: String
     )
 
+    data class BasicResponse(
+        val message: String
+    )
+
     data class DataResponse(
         val author: String?,
         val content: String?,

@@ -1,6 +1,7 @@
 package com.example.retrofitexercise.config
 
 import com.example.retrofitexercise.client.shortnews.ShortNewsClient
+import com.example.retrofitexercise.client.NullOrEmptyConverterFactory
 import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.Headers
 import okhttp3.OkHttpClient
@@ -39,6 +40,7 @@ class ClientDiConfiguration(
 
         return Retrofit.Builder()
             .baseUrl(shortNews.host!!)
+            .addConverterFactory(NullOrEmptyConverterFactory())
             .addConverterFactory(JacksonConverterFactory.create(mapper))
             .callFactory(httpClient)
             .build()
