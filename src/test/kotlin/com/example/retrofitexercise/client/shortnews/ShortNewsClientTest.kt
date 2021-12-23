@@ -7,6 +7,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.kotest.assertions.asClue
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
@@ -100,5 +101,43 @@ internal class ShortNewsClientTest: MockWebServerSupport() {
             it.source().buffer.request(Long.MAX_VALUE)
             it.source().buffer.clone().readString(Charset.forName("UTF-8")) shouldBe "{ \"message\": \"INTERNAL SERVER ERROR\" }"
         }
+    }
+
+    @Test
+    @DisplayName("500 결과지만, 별도의 mockWebServer enqueue() 를 추가하여 별도의 body 로 작성할 수 있도록 한다.")
+    fun result500TestOnBodyAnother() {
+
+        // given
+        val mockClient = buildRetrofitClient(baseUrl, ShortNewsClient::class.java)
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(HttpStatus.OK.value())
+                .setBody("{ \"message\": \"force enqueue()\" }")
+        )
+
+        // when
+        val response = mockClient.result500().execute().body()!!
+
+        // then
+        response.message shouldBe "force enqueue()"
+    }
+
+    @Test
+    @DisplayName("resultXXX 를 테스트한다. : 별도의 MockResponse() 를 만들어본다.")
+    fun resultXXXTest() {
+
+        // given
+        val mockClient = buildRetrofitClient(baseUrl, ShortNewsClient::class.java)
+        server.enqueue(
+            MockResponse()
+                .setResponseCode(HttpStatus.OK.value())
+                .setBody("{ \"message\": \"sample ok\" }")
+        )
+
+        // when
+        val response = mockClient.resultXXX().execute().body()!!
+
+        // then
+        response.message shouldBe "sample ok"
     }
 }

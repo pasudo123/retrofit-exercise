@@ -33,4 +33,7 @@ interface ShortNewsClient {
 
     @GET("result-500")
     fun result500(): Call<ShortNewsResources.BasicResponse>
+
+    @GET("result-xxx")
+    fun resultXXX(): Call<ShortNewsResources.BasicResponse>
 }

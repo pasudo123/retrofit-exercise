@@ -1,1 +1,5 @@
+### sync
 GET {{host}}/short-news/sync?category=ALL
+
+### async
+GET {{host}}/short-news/async?category=ALL
