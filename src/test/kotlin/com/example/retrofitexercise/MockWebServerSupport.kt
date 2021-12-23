@@ -34,7 +34,9 @@ abstract class MockWebServerSupport {
     @BeforeEach
     fun beforeEach() {
         server = MockWebServer()
-        server.dispatcher = MockDispatcher()
+        server.dispatcher = MockDispatcher().apply {
+            this.setFailFast(true)
+        }
         server.start(InetAddress.getByName(HOST), PORT)
     }
 
