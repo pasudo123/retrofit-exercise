@@ -20,6 +20,7 @@ class ShortNewsController(
     fun getNewsBySync(
         @RequestParam("category") category: ShortNewsClient.Category
     ): ResponseEntity<ShortNewsResources.Response> {
+        Thread.sleep(5000)
 
         val response: ShortNewsResources.Response
         val callSync = shortNewsClient.getNewsByCategory(category.param)
@@ -37,6 +38,7 @@ class ShortNewsController(
     suspend fun getNewsByAsync(
         @RequestParam("category") category: ShortNewsClient.Category
     ): ResponseEntity<ShortNewsResources.Response> {
+        Thread.sleep(5000)
         return ResponseEntity.ok(shortNewsClient.getNewsByCategory(category.param).await())
     }
 }

@@ -20,7 +20,12 @@ dependencies {
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    // springboot-web tomcat exclude using undertow
+    implementation("org.springframework.boot:spring-boot-starter-web") {
+        exclude("org.springframework.boot", "spring-boot-starter-tomcat")
+    }
+    implementation("org.springframework.boot:spring-boot-starter-undertow")
+
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -28,7 +33,6 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor
     // springboot configuration processor
     implementation("org.springframework.boot:spring-boot-configuration-processor")
-
 
     // springboot validation
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -60,6 +64,10 @@ dependencies {
     // mock & kotest
     testImplementation("io.mockk:mockk:1.10.6")
     testImplementation("io.kotest:kotest-assertions-core:4.4.3")
+
+    // khttp : https://github.com/ascclemens/khttp
+    // https://mvnrepository.com/artifact/khttp/khttp
+    testImplementation("khttp:khttp:1.0.0")
 }
 
 tasks.withType<KotlinCompile> {
