@@ -2,6 +2,7 @@ package com.example.retrofitexercise.config
 
 import com.example.retrofitexercise.client.shortnews.ShortNewsClient
 import com.example.retrofitexercise.client.NullOrEmptyConverterFactory
+import com.example.retrofitexercise.client.shortnews.ShortNewsAsyncClient
 import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.Headers
 import okhttp3.OkHttpClient
@@ -45,6 +46,25 @@ class ClientDiConfiguration(
             .callFactory(httpClient)
             .build()
             .create(ShortNewsClient::class.java)
+    }
+
+    @Bean
+    fun shortNewsAsyncClient(): ShortNewsAsyncClient {
+
+        val headers = Headers.of(mapOf(
+            "Content-Type" to "application/json",
+            "Accept" to "application/json"
+        ))
+
+        val httpClient = generateHttpClient(headers, shortNews)
+
+        return Retrofit.Builder()
+            .baseUrl(shortNews.host!!)
+            .addConverterFactory(NullOrEmptyConverterFactory())
+            .addConverterFactory(JacksonConverterFactory.create(mapper))
+            .callFactory(httpClient)
+            .build()
+            .create(ShortNewsAsyncClient::class.java)
     }
 
     companion object {

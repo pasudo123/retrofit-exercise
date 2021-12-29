@@ -4,6 +4,7 @@ import com.example.retrofitexercise.shortnews.resources.ShortNewsResources
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
+import retrofit2.http.Url
 
 interface ShortNewsClient {
 
@@ -18,6 +19,13 @@ interface ShortNewsClient {
 
     @GET("news")
     fun getNewsByCategory(@Query("category") category: String): Call<ShortNewsResources.Response>
+
+    /**
+     * local 에서 실행된 거를 내려주도록 한다.
+     * local -> local
+     */
+    @GET
+    fun getMockNewsByCategory(@Url url: String): Call<ShortNewsResources.Response>
 
     @GET("result-200")
     fun result200(): Call<ShortNewsResources.BasicResponse>

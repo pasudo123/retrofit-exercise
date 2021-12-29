@@ -1,10 +1,10 @@
 server:
   port: 48080
   undertow:
-    # undertow.threads.worker = undertow.threads.io * 8
+    # 수식확인 :: (undertow.threads.worker) = (undertow.threads.io) * 8
     threads:
-      io: 2
-      worker: 1
+      io: 8
+      worker: 64
 
 app:
   # client.*.host 에 마지막은 '/' 를 붙여준다. : 그렇지 않으면 retrofit 에서 에러를 뱉어낸다.
